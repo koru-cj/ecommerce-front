@@ -1,0 +1,160 @@
+/* Overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, var(--color-dark) 70%, transparent);
+  backdrop-filter: blur(6px);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+  padding: 2rem 1rem;
+}
+
+/* Card */
+.modal-card {
+  background: var(--color-dark);
+  color: var(--color-light);
+  border-radius: 16px;
+  padding: 1.5rem;
+  max-width: 760px;
+  width: min(96%, 760px);
+  box-shadow: 0 28px 70px color-mix(in srgb, var(--color-dark) 55%, transparent);
+  border: 1px solid var(--color-border);
+  position: relative;
+}
+
+/* Barra superior decorativa */
+.modal-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 60%, var(--color-info) 100%);
+}
+
+/* Título */
+.modal-card h2 {
+  margin: .2rem 0 1rem;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: .2px;
+}
+
+/* Grid del formulario */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .85rem;
+}
+
+/* Labels + inputs */
+.grid label {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  font-size: .92rem;
+  color: var(--color-light);
+}
+.grid input[type="text"],
+.grid input[type="number"],
+.grid input[type="date"] {
+  padding: .7rem .8rem;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  background: color-mix(in srgb, var(--color-dark) 88%, black);
+  color: var(--color-light);
+  transition: border-color .15s ease, box-shadow .2s ease, background .2s ease;
+}
+.grid input::placeholder { color: var(--color-muted); }
+
+.grid input:focus {
+  outline: none;
+  border-color: var(--color-info);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-info) 20%, transparent);
+  background: color-mix(in srgb, var(--color-dark) 82%, black);
+}
+/* Estado base de los inputs en grid */
+.grid input {
+  width: 100%;
+  padding: .7rem .8rem;
+  font-size: .95rem;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  background: color-mix(in srgb, var(--color-dark) 88%, black);
+  color: var(--color-light);
+  transition: border-color .15s ease, box-shadow .2s ease, background .2s ease;
+}
+
+/* Placeholder */
+.grid input::placeholder {
+  color: var(--color-muted);
+}
+
+/* Hover (opcional, sutil) */
+.grid input:hover {
+  border-color: var(--color-info-hover);
+}
+
+/* Focus */
+.grid input:focus {
+  outline: none;
+  border-color: var(--color-info);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-info) 20%, transparent);
+  background: color-mix(in srgb, var(--color-dark) 82%, black);
+}
+
+/* Disabled */
+.grid input:disabled {
+  background: var(--color-bg-hover);
+  cursor: not-allowed;
+  opacity: .7;
+}
+
+/* Checkbox “Visible” alineado */
+.grid input[type="checkbox"] {
+  width: 18px; height: 18px;
+  accent-color: var(--color-secondary);
+}
+
+/* Acciones del modal */
+.modal-actions {
+  margin-top: 1.2rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: .6rem;
+}
+
+/* Botones coherentes */
+.modal-actions button {
+  padding: .65rem 1rem;
+  font-weight: 800;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .2s ease, filter .15s ease, background .15s ease;
+}
+
+/* Guardar (primario brasas) */
+.modal-actions button[type="submit"] {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: #fff;
+}
+.modal-actions button[type="submit"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px color-mix(in srgb, var(--color-primary) 32%, transparent);
+}
+
+/* Cancelar (neutro) */
+.modal-actions button[type="button"] {
+  background: color-mix(in srgb, var(--color-dark) 86%, black);
+  color: var(--color-light);
+  border: 1px solid var(--color-border);
+}
+.modal-actions button[type="button"]:hover {
+  background: color-mix(in srgb, var(--color-dark) 78%, black);
+}
+
+/* Responsive */
+@media (max-width: 720px) {
+  .grid { grid-template-columns: 1fr; }
+}

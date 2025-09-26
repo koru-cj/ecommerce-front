@@ -1,0 +1,17 @@
+.not-found {
+  text-align: center;
+  padding: 4rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+.not-found h1 {
+  font-size: 5rem;
+  color: #888;
+}
+.not-found p {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+.not-found a {
+  color: #007bff;
+  text-decoration: none;
+}

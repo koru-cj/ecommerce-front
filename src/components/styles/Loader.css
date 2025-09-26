@@ -1,0 +1,43 @@
+.loader-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-dark));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.loader-logo {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: linear-gradient(225deg, var(--color-light), var(--color-dark));
+  margin-bottom: 1.5rem;
+  font-family: 'Segoe UI', sans-serif;
+  animation: fadeIn 1.2s ease-in-out;
+}
+
+.loader-ring {
+  width: 60px;
+  height: 60px;
+  border: 6px solid var(--color-border);
+  border-top-color: var(--color-light);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
