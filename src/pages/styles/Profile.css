@@ -1,0 +1,149 @@
+/* ===== Contenedor ===== */
+.profile-container {
+  max-width: 820px;
+  margin: 1.5rem auto;
+  padding: 1.5rem 1.25rem 1.75rem;
+  background: var(--color-dark);
+  color: var(--color-tab-text);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  box-shadow: 0 28px 60px color-mix(in srgb, var(--color-dark) 45%, transparent);
+  position: relative;
+}
+
+/* Barra decorativa superior (brasas/bordó) */
+.profile-container::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 60%, var(--color-info) 100%);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+/* Título */
+.profile-container > h1 {
+  margin: .2rem 0 1rem 0;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: .2px;
+  color: var(--color-light);
+}
+
+/* ===== Formulario ===== */
+.profile-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem 1rem;
+}
+
+/* 2 columnas a partir de 760px */
+@media (min-width: 760px) {
+  .profile-form {
+    grid-template-columns: repeat(2, minmax(260px, 1fr));
+  }
+}
+
+/* Cada grupo */
+.field-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Etiquetas */
+.field-group label {
+  font-weight: 700;
+  color: var(--color-light);
+  margin-bottom: 0.35rem;
+  font-size: 0.95rem;
+  letter-spacing: .2px;
+}
+
+/* Inputs base (oscuro, legible) */
+.field-group input {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  font-size: 1rem;
+  background: color-mix(in srgb, var(--color-dark) 88%, black);
+  color: var(--color-tab-text);
+  transition: border-color .15s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+}
+
+.field-group input::placeholder {
+  color: var(--color-muted);
+}
+
+/* Hover sutil */
+.field-group input:hover {
+  border-color: var(--color-border-light);
+}
+
+/* Focus accesible */
+.field-group input:focus {
+  outline: none;
+  border-color: var(--color-info);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-info) 22%, transparent);
+  background: color-mix(in srgb, var(--color-dark) 82%, black);
+}
+
+/* Disabled */
+.field-group input:disabled {
+  background: var(--color-bg-hover);
+  color: var(--color-rating-text);
+  cursor: not-allowed;
+}
+
+/* Validación coherente */
+.field-group input.input-error {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-danger) 20%, transparent);
+}
+.field-group input.input-valid {
+  border-color: var(--color-success);
+}
+
+/* Mensajes */
+.success-msg,
+.error-msg {
+  margin: 0.35rem 0 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  padding: .55rem .75rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+}
+
+.success-msg {
+  color: var(--color-success);
+  background: color-mix(in srgb, var(--color-success) 10%, var(--color-dark));
+  border-color: color-mix(in srgb, var(--color-success) 40%, var(--color-border));
+}
+
+.error-msg {
+  color: var(--color-danger);
+  background: color-mix(in srgb, var(--color-danger) 12%, var(--color-dark));
+  border-color: color-mix(in srgb, var(--color-danger) 45%, var(--color-border));
+}
+
+/* Botón guardar (gradiente bordó → naranja) */
+.btn[type="submit"] {
+  grid-column: 1 / -1; /* ocupa todo el ancho en grid */
+  margin-top: .25rem;
+  padding: 0.9rem 1.2rem;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 1rem;
+  letter-spacing: .2px;
+  transition: transform .15s ease, box-shadow .2s ease, filter .15s ease;
+}
+
+.btn[type="submit"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px color-mix(in srgb, var(--color-primary) 32%, transparent);
+}

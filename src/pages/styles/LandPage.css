@@ -1,0 +1,12 @@
+.LandPageContainer {
+  margin-top: 1rem;
+  background: radial-gradient(
+    1100px 760px at 20% -10%,
+    var(--color-dark) 0%,
+    var(--color-bg-soft) 55%,
+    var(--color-dark) 100%
+  );
+}
+
+/* Si tu SectionSeparator y VideoPanel comparten botones,
+   heredarán del theme sin tocar sus JSX ni estilos internos */

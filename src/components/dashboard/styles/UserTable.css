@@ -1,0 +1,27 @@
+/* src/components/dashboard/UserTable.css */
+.user-table {
+  margin-bottom: 2rem;
+}
+
+.user-table table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ccc;
+}
+
+.user-table th, .user-table td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+.user-table th {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.user-table select {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #888;
+}
