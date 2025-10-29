@@ -5,6 +5,8 @@ import WishlistModal from './WishlistModal';
 import './styles/Navbar.css';
 import { useSettings } from '../context/settingsContext';
 import CartIcon from './CartIcon';
+import FeIcon from './Icons/FeIcon';
+import FeMark from './Icons/FeMark';
 
 export default function Navbar({ user, handleLogout, cartItemsCount = 0, searchQuery, setSearchQuery }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -40,11 +42,7 @@ export default function Navbar({ user, handleLogout, cartItemsCount = 0, searchQ
           <div className="navbar-content">
             {/* Logo */}
             <Link to="/" className="navbar-logo" aria-label="Inicio">
-              <svg viewBox="0 0 40 40" className="logo-icon" aria-hidden="true">
-                <circle cx="20" cy="20" r="18" fill="currentColor" />
-                <path d="M12 20l6 6 12-12" stroke="white" strokeWidth="2" fill="none" />
-              </svg>
-              <span>{settings.nombre_logo || 'TiendaPro'}</span>
+              <FeMark/>            
             </Link>
 
             {/* Right side actions */}
