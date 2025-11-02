@@ -16,6 +16,7 @@ import LandPage from './pages/LandPage';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import VerifyEmail from './pages/VerifyEmail';
+import GuestRoute from './auth/GuestRoute';
 
 export default function App() {
   const { user, loading } = useAuth();
@@ -41,9 +42,23 @@ export default function App() {
               <Route index element={<LandPage />} />
               <Route path="/products" element={<Home />} />
 
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              
+              {/* Solo para no logueados */}
+              <Route
+                path="/login"
+                element={
+                  <GuestRoute>
+                    <Login />
+                  </GuestRoute>
+                }
+              />
+              <Route
+                path="/register"
+                element={
+                  <GuestRoute>
+                    <Register />
+                  </GuestRoute>
+                }
+              />
               <Route
                 path="/profile"
                 element={

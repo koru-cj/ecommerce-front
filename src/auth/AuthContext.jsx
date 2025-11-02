@@ -1,39 +1,52 @@
-// src/auth/AuthContext.jsx
-import { createContext, useContext, useState, useEffect } from 'react';
-import { getProfile } from '../lib/apiClient';
+import { createContext, useContext, useState, useEffect } from "react";
+import { getProfile } from "../lib/apiClient";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [token, setToken] = useState(localStorage.getItem("token"));
   const [loading, setLoading] = useState(true);
 
+  // ✅ Inicialización del contexto al cargar la app
   useEffect(() => {
-    if (token) {
-      getProfile(token)
-        .then(data => {
-          if (data?.id) setUser(data);
-          else logout();
-        })
-        .catch(() => logout())
-        .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
-    }
+    const init = async () => {
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const profile = await getProfile(token);
+        setUser(profile);
+      } catch (err) {
+        console.error("Error cargando perfil:", err);
+        localStorage.removeItem("token");
+        setToken(null);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    init();
   }, [token]);
 
-  function login(newToken, userData) {
-    localStorage.setItem('token', newToken);
+  // ✅ Función para iniciar sesión (manual o Google)
+  const login = (newToken, newUser) => {
+    localStorage.setItem("token", newToken);
+    localStorage.setItem("user", JSON.stringify(newUser));
     setToken(newToken);
-    setUser(userData); // ya viene del backend en la respuesta del login
-  }
+    setUser(newUser);
+  };
 
-  function logout() {
-    localStorage.removeItem('token');
+  // ✅ Función para cerrar sesión
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setToken(null);
     setUser(null);
-  }
+  };
 
   return (
     <AuthContext.Provider value={{ user, token, login, logout, loading }}>
@@ -42,6 +55,4 @@ export function AuthProvider({ children }) {
   );
 }
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
+export const useAuth = () => useContext(AuthContext);
