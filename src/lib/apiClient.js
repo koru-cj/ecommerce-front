@@ -21,14 +21,36 @@ export async function registerUser({ name, email, password }) {
   });
 
   const data = await res.json();
-  console.log('🔍 Register response:', data);
 
   if (!res.ok) {
     return { error: data.error || 'Error desconocido' };
   }
 
+  // El backend devuelve: { message: "Usuario creado correctamente. Revisá tu correo..." }
   return data;
 }
+// 📩 Reenviar verificación de correo
+export async function resendVerificationEmail(email) {
+  try {
+    const res = await fetch(`${API_URL}/auth/resend-verification`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || "No se pudo reenviar el correo de verificación");
+    }
+
+    return { message: data.message };
+  } catch (error) {
+    console.error("💥 Error al reenviar correo:", error);
+    return { error: error.message };
+  }
+}
+
 
 // Login de usuario
 export async function loginUser(credentials) {

@@ -3,9 +3,12 @@ import { getProfile, updateUserInfo } from '../lib/apiClient';
 import { useAuth } from '../auth/AuthContext';
 import Loader from '../components/Loader';
 import './styles/Profile.css';
+import { resendVerificationEmail } from '../lib/apiClient';
 
 export default function Profile() {
   const { token } = useAuth();
+  const [verifyMsg, setVerifyMsg] = useState(null);
+  const [verificando, setVerificando] = useState(false);
 
   const [profile, setProfile] = useState(null);
 
@@ -179,6 +182,35 @@ export default function Profile() {
         {message && <p className="success-msg">{message}</p>}
         {error && <p className="error-msg">{error}</p>}
       </form>
+      {!profile?.verificado && (
+        <div className="verify-block">
+          <p style={{ fontSize: "0.9rem", color: "#666" }}>
+            ⚠️ Tu correo aún no está verificado.
+          </p>
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={async () => {
+              setVerificando(true);
+              setVerifyMsg(null);
+              const result = await resendVerificationEmail(profile.email);
+              if (result.error) setVerifyMsg(`⚠️ ${result.error}`);
+              else setVerifyMsg(`✅ ${result.message}`);
+              setVerificando(false);
+            }}
+            disabled={verificando}
+            style={{ marginTop: "6px" }}
+          >
+            {verificando ? "Enviando..." : "Reenviar verificación"}
+          </button>
+
+          {verifyMsg && (
+            <p style={{ fontSize: "0.85rem", marginTop: "6px" }}>{verifyMsg}</p>
+          )}
+        </div>
+      )}
+
     </div>
+    
   );
 }

@@ -1,37 +1,24 @@
-import { useState } from 'react';
-import { registerUser } from '../lib/apiClient';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../auth/AuthContext';
+import { useState } from "react";
+import { registerUser } from "../lib/apiClient";
+import { useNavigate } from "react-router-dom";
 
-export default function RegisterForm({ onRegister }) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export default function RegisterForm() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
-  const { login } = useAuth();
+  const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
 
   function validate() {
     const errs = {};
-
-    if (!name.trim()) {
-      errs.name = 'El nombre es obligatorio';
-    } else if (name.trim().length < 2) {
-      errs.name = 'El nombre debe tener al menos 2 caracteres';
-    }
-
-    if (!email) {
-      errs.email = 'El correo es obligatorio';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      errs.email = 'Correo inválido';
-    }
-
-    if (!password) {
-      errs.password = 'La contraseña es obligatoria';
-    } else if (password.length < 6) {
-      errs.password = 'Debe tener al menos 6 caracteres';
-    }
-
+    if (!name.trim()) errs.name = "El nombre es obligatorio";
+    if (!email) errs.email = "El correo es obligatorio";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      errs.email = "Correo inválido";
+    if (!password) errs.password = "La contraseña es obligatoria";
+    else if (password.length < 6)
+      errs.password = "Debe tener al menos 6 caracteres";
     setErrors(errs);
     return Object.keys(errs).length === 0;
   }
@@ -42,61 +29,73 @@ export default function RegisterForm({ onRegister }) {
 
     try {
       const result = await registerUser({ name, email, password });
-      if (result.token && result.user) {
-        login(result.token, result.user);
-        onRegister?.(result.user);
-        navigate('/dashboard');
+      if (result.error) {
+        setErrors({ general: result.error });
       } else {
-        setErrors({ general: result.error || 'Error al registrarse' });
+        setSuccessMessage(result.message);
       }
     } catch (err) {
       console.error(err);
-      setErrors({ general: 'Error inesperado. Intenta más tarde.' });
+      setErrors({ general: "Error inesperado. Intenta más tarde." });
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="register-form">
-      {errors.general && <div className="error-message">{errors.general}</div>}
+      {successMessage ? (
+        <div className="success-message">
+          ✅ {successMessage}  
+          <br />
+          Revisá tu correo y hacé clic en el enlace de verificación.
+        </div>
+      ) : (
+        <>
+          {errors.general && (
+            <div className="error-message">{errors.general}</div>
+          )}
 
-      <div className="form-group">
-        <input
-          type="text"
-          placeholder="Nombre completo"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          className={`form-input ${errors.name ? 'input-error' : ''}`}
-        />
-        {errors.name && <div className="error-message">{errors.name}</div>}
-      </div>
+          <div className="form-group">
+            <input
+              type="text"
+              placeholder="Nombre completo"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className={`form-input ${errors.name ? "input-error" : ""}`}
+            />
+            {errors.name && <div className="error-message">{errors.name}</div>}
+          </div>
 
-      <div className="form-group">
-        <input
-          type="email"
-          placeholder="Correo electrónico"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          className={`form-input ${errors.email ? 'input-error' : ''}`}
-        />
-        {errors.email && <div className="error-message">{errors.email}</div>}
-      </div>
+          <div className="form-group">
+            <input
+              type="email"
+              placeholder="Correo electrónico"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={`form-input ${errors.email ? "input-error" : ""}`}
+            />
+            {errors.email && (
+              <div className="error-message">{errors.email}</div>
+            )}
+          </div>
 
-      <div className="form-group">
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          className={`form-input ${errors.password ? 'input-error' : ''}`}
-        />
-        {errors.password && (
-          <div className="error-message">{errors.password}</div>
-        )}
-      </div>
+          <div className="form-group">
+            <input
+              type="password"
+              placeholder="Contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={`form-input ${errors.password ? "input-error" : ""}`}
+            />
+            {errors.password && (
+              <div className="error-message">{errors.password}</div>
+            )}
+          </div>
 
-      <button type="submit" className="register-button">
-        Crear cuenta
-      </button>
+          <button type="submit" className="register-button">
+            Crear cuenta
+          </button>
+        </>
+      )}
     </form>
   );
 }

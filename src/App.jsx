@@ -15,6 +15,7 @@ import { CartProvider } from './context/cartContext';
 import LandPage from './pages/LandPage';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
+import VerifyEmail from './pages/VerifyEmail';
 
 export default function App() {
   const { user, loading } = useAuth();
@@ -68,7 +69,7 @@ export default function App() {
                 }
               />
               <Route path="/checkout" element={user ? <Checkout /> : <Navigate to="/login" replace />} />
-              
+              <Route path="/verify-email" element={<VerifyEmail />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>    

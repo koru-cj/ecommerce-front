@@ -147,3 +147,16 @@
   transform: translateY(-1px);
   box-shadow: 0 12px 26px color-mix(in srgb, var(--color-primary) 32%, transparent);
 }
+
+.verify-block {
+  margin-top: 0.5rem;
+  background: #f9f9f9;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border-left: 3px solid var(--color-warning, #f39c12);
+}
+
+.verify-block button {
+  margin-top: 6px;
+  font-size: 0.9rem;
+}
