@@ -142,51 +142,47 @@ export default function Checkout() {
       setSaving(false);
     }
   };
+const goPay = async () => {
+  if (!cart.length) {
+    setError('Tu carrito está vacío.');
+    return;
+  }
 
-  const goPay = async () => {
-    if (!cart.length) {
-      setError('Tu carrito está vacío.');
-      return;
-    }
+  if (!profileSaved) {
+    setError('Guardá primero tu información personal antes de finalizar.');
+    setStep(1);
+    return;
+  }
 
-    if (!profileSaved) {
-      setError('Guardá primero tu información personal antes de finalizar.');
-      setStep(1);
-      return;
-    }
+  setSubmitting(true);
+  setError('');
 
-    setSubmitting(true);
-    setError('');
+  try {
+    const { pay_url, mp_init_point, orderId } = await checkoutInit(method);
 
-    let newWin = null;
+    console.log('checkoutInit response:', {
+      method,
+      pay_url,
+      mp_init_point,
+      orderId,
+    });
 
-    try {
-      newWin = window.open('', '_blank', 'noopener,noreferrer');
+    const url = method === 'mercadopago' ? mp_init_point : pay_url;
 
-      const { pay_url, mp_init_point, orderId } = await checkoutInit(method);
-
-      const url = method === 'mercadopago' ? mp_init_point : pay_url;
-
-      if (url) {
-        if (newWin) {
-          newWin.opener = null;
-          newWin.location.href = url;
-        } else {
-          window.open(url, '_blank', 'noopener,noreferrer');
-        }
-        return;
-      }
-
-      if (newWin) newWin.close();
+    if (!url) {
       navigate(orderId ? `/orders/${orderId}` : '/profile');
-    } catch (e) {
-      console.error('checkout init error', e);
-      if (newWin) newWin.close();
-      setError(e.message || 'No se pudo iniciar el checkout.');
-    } finally {
-      setSubmitting(false);
+      return;
     }
-  };
+
+    window.location.href = url;
+  } catch (e) {
+    console.error('checkout init error', e);
+    setError(e.message || 'No se pudo iniciar el checkout.');
+  } finally {
+    setSubmitting(false);
+  }
+};
+
 
   const handleStepClick = (targetStep) => {
     if (targetStep === 1) {
