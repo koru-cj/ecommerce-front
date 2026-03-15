@@ -1,15 +1,19 @@
-import React from 'react';
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './App';
-import './styles/index.css';       // ← asegúrate de que exista ESTE archivo
-import { AuthProvider } from './auth/AuthContext';
+import React, { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App";
+import "./styles/index.css";
+import { AuthProvider } from "./auth/AuthContext";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <AuthProvider>
+// 👇 leemos el CLIENT ID desde el archivo .env del frontend
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
-      <App />
-    </AuthProvider>
-  </StrictMode>
+createRoot(document.getElementById("root")).render(
+  <GoogleOAuthProvider clientId={clientId}>
+    <StrictMode>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </StrictMode>
+  </GoogleOAuthProvider>
 );

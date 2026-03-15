@@ -1,0 +1,97 @@
+.payment-status-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.06), transparent 35%),
+    linear-gradient(180deg, rgba(10,10,10,0.98), rgba(18,18,18,1));
+}
+
+.payment-status-card {
+  width: 100%;
+  max-width: 720px;
+  border-radius: 24px;
+  padding: 2rem;
+  backdrop-filter: blur(18px);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  color: var(--color-light, #f5f5f5);
+  text-align: center;
+}
+
+.payment-status-card.success {
+  border-color: rgba(70, 200, 120, 0.35);
+}
+
+.payment-status-card.pending {
+  border-color: rgba(255, 190, 60, 0.35);
+}
+
+.payment-status-card.failure {
+  border-color: rgba(255, 90, 90, 0.35);
+}
+
+.payment-status-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.payment-status-card h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+}
+
+.payment-status-card p {
+  margin: 0 0 0.8rem;
+  color: var(--color-muted, rgba(255,255,255,0.72));
+  line-height: 1.6;
+}
+
+.payment-status-meta {
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  text-align: left;
+}
+
+.payment-status-meta p {
+  margin: 0.45rem 0;
+  word-break: break-word;
+}
+
+.payment-status-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.payment-btn {
+  min-width: 190px;
+  padding: 0.9rem 1.2rem;
+  border-radius: 14px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.payment-btn:hover {
+  transform: translateY(-2px);
+}
+
+.payment-btn.primary {
+  background: var(--color-primary, #fe8932);
+  color: #111;
+}
+
+.payment-btn.secondary {
+  background: rgba(255,255,255,0.06);
+  color: var(--color-light, #fff);
+  border: 1px solid rgba(255,255,255,0.12);
+}

@@ -79,7 +79,20 @@ export default function Navbar({ user, handleLogout, cartItemsCount = 0, searchQ
                 {user ? (
                   <div className="user-dropdown">
                     <button className="user-button">
-                      <div className="user-avatar">{user.name?.charAt(0).toUpperCase() || 'U'}</div>
+                      {/* Avatar dinámico */}
+                      {user.google_id && user.avatar_url ? (
+                        <img
+                          src={user.avatar_url}
+                          alt={user.name}
+                          className="user-avatar-img"
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <div className="user-avatar">
+                          {user.name?.charAt(0).toUpperCase() || 'U'}
+                        </div>
+                      )}
+
                       <span className="nav-label">{user.name || 'Usuario'}</span>
                       <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
                         <path d="M8 12l-4-4h8l-4 4z" fill="currentColor" />

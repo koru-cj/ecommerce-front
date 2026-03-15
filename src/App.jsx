@@ -15,6 +15,11 @@ import { CartProvider } from './context/cartContext';
 import LandPage from './pages/LandPage';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
+import VerifyEmail from './pages/VerifyEmail';
+import GuestRoute from './auth/GuestRoute';
+import PaymentSuccess from './pages/PaymentSuccess';
+import PaymentPending from './pages/PaymentPending';
+import PaymentFailure from './pages/PaymentFailure'; 
 
 export default function App() {
   const { user, loading } = useAuth();
@@ -40,9 +45,23 @@ export default function App() {
               <Route index element={<LandPage />} />
               <Route path="/products" element={<Home />} />
 
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              
+              {/* Solo para no logueados */}
+              <Route
+                path="/login"
+                element={
+                  <GuestRoute>
+                    <Login />
+                  </GuestRoute>
+                }
+              />
+              <Route
+                path="/register"
+                element={
+                  <GuestRoute>
+                    <Register />
+                  </GuestRoute>
+                }
+              />
               <Route
                 path="/profile"
                 element={
@@ -68,7 +87,11 @@ export default function App() {
                 }
               />
               <Route path="/checkout" element={user ? <Checkout /> : <Navigate to="/login" replace />} />
-              
+              <Route path="/payment/success" element={<PaymentSuccess />} />
+              <Route path="/payment/pending" element={<PaymentPending />} />
+              <Route path="/payment/failure" element={<PaymentFailure />} />
+
+              <Route path="/verify-email" element={<VerifyEmail />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>    
