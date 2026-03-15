@@ -303,11 +303,11 @@
   box-shadow: 0 4px 15px rgba(59, 58, 55, 0.4);
 }
 
-.checkout-btn:disabled {
+/* .checkout-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none !important;
-}
+} */
 
 /* ===== CARRITO CON EFECTOS ESPECIALES ===== */
 .cart-summary {
@@ -411,11 +411,11 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-.payment-option.disabled {
+/* .payment-option.disabled {
   opacity: 0.4;
   cursor: not-allowed;
   filter: grayscale(100%);
-}
+} */
 
 .payment-option input[type="radio"] {
   position: absolute;

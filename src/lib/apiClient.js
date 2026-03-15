@@ -398,6 +398,7 @@ export async function clearCart() {
 // channel: 'whatsapp' | 'mercadopago'
 export async function checkoutInit(channel = 'whatsapp') {
   const token = localStorage.getItem('token');
+
   const res = await fetch(`${API_URL}/checkout/init`, {
     method: 'POST',
     headers: {
@@ -406,10 +407,18 @@ export async function checkoutInit(channel = 'whatsapp') {
     },
     body: JSON.stringify({ channel }),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error en checkout');
-  // whatsapp: { orderId, total, pay_url }
-  // MP (futuro): { orderId, total, mp_init_point }
+
+  let data = null;
+  try {
+    data = await res.json();
+  } catch {
+    throw new Error('La respuesta del servidor no fue válida.');
+  }
+
+  if (!res.ok) {
+    throw new Error(data?.error || 'Error en checkout');
+  }
+
   return data;
 }
 
