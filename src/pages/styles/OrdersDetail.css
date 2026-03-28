@@ -350,3 +350,21 @@
     width: 100%;
   }
 }
+
+.badge--approved {
+  background: rgba(25, 135, 84, 0.14);
+  color: #146c43;
+  border-color: rgba(25, 135, 84, 0.28);
+}
+
+.badge--rejected {
+  background: rgba(220, 53, 69, 0.14);
+  color: #b02a37;
+  border-color: rgba(220, 53, 69, 0.26);
+}
+
+.badge--cancelled {
+  background: rgba(108, 117, 125, 0.16);
+  color: #495057;
+  border-color: rgba(108, 117, 125, 0.26);
+}

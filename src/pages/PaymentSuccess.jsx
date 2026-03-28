@@ -27,11 +27,11 @@ export default function PaymentSuccess() {
         </div>
 
         <div className="payment-status-actions">
-          <Link to="/profile" className="payment-btn primary">
-            Ver mi cuenta
+          <Link to="/pedidos" className="payment-btn primary">
+            Ver todos mis pedidos
           </Link>
-          <Link to="/orders" className="payment-btn secondary">
-            Ver mis órdenes
+          <Link to="/seguimiento" className="payment-btn secondary">
+            Ver mis pedidos pendientes
           </Link>
         </div>
       </div>
