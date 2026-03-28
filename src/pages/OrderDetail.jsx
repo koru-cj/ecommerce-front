@@ -37,10 +37,10 @@ function OrderStatusBadge({ status }) {
 function PaymentStatusBadge({ status }) {
   const labels = {
     pending: 'Pago pendiente',
-    paid: 'Pago aprobado',
-    failed: 'Pago fallido',
+    approved: 'Pago aprobado',
+    rejected: 'Pago rechazado',
     refunded: 'Reintegrado',
-    chargeback: 'Chargeback',
+    cancelled: 'Pago cancelado',
   };
 
   return (
@@ -49,6 +49,7 @@ function PaymentStatusBadge({ status }) {
     </span>
   );
 }
+
 
 function getOrderProgressInfo(order) {
   const orderStatus = order?.status;
@@ -66,7 +67,7 @@ function getOrderProgressInfo(order) {
     };
   }
 
-  if (paymentStatus === 'paid' && orderStatus === 'preparing') {
+  if (paymentStatus === 'approved' && orderStatus === 'preparing') {
     return {
       title: 'Pago confirmado, pedido en preparación',
       description:
@@ -78,7 +79,7 @@ function getOrderProgressInfo(order) {
     };
   }
 
-  if (paymentStatus === 'paid' && orderStatus === 'shipped') {
+  if (paymentStatus === 'approved' && orderStatus === 'shipped') {
     return {
       title: 'Pedido enviado',
       description:
@@ -90,7 +91,7 @@ function getOrderProgressInfo(order) {
     };
   }
 
-  if (paymentStatus === 'paid' && orderStatus === 'delivered') {
+  if (paymentStatus === 'approved' && orderStatus === 'delivered') {
     return {
       title: 'Pedido entregado',
       description:
@@ -102,12 +103,24 @@ function getOrderProgressInfo(order) {
     };
   }
 
-  if (paymentStatus === 'failed' || orderStatus === 'payment_failed') {
+  if (paymentStatus === 'rejected' || orderStatus === 'payment_failed') {
     return {
       title: 'El pago no se completó',
       description:
         'La orden existe, pero el pago fue rechazado o falló. El pedido no avanzó a preparación ni a envío.',
-      paymentLabel: 'Fallido',
+      paymentLabel: 'Rechazado',
+      orderLabel: 'No procesado',
+      shippingLabel: 'No iniciado',
+      tone: 'danger',
+    };
+  }
+
+  if (paymentStatus === 'cancelled' && orderStatus === 'payment_failed') {
+    return {
+      title: 'El pago fue cancelado',
+      description:
+        'La orden existe, pero el pago fue cancelado antes de completarse. El pedido no avanzó a preparación ni a envío.',
+      paymentLabel: 'Cancelado',
       orderLabel: 'No procesado',
       shippingLabel: 'No iniciado',
       tone: 'danger',
@@ -119,7 +132,14 @@ function getOrderProgressInfo(order) {
       title: 'Pedido en revisión manual',
       description:
         'La orden necesita intervención manual. Puede ser por stock, validación del pago o alguna inconsistencia operativa.',
-      paymentLabel: paymentStatus === 'paid' ? 'Aprobado' : paymentStatus || 'En revisión',
+      paymentLabel:
+        paymentStatus === 'approved'
+          ? 'Aprobado'
+          : paymentStatus === 'pending'
+          ? 'Pendiente'
+          : paymentStatus === 'cancelled'
+          ? 'Cancelado'
+          : paymentStatus || 'En revisión',
       orderLabel: 'Revisión manual',
       shippingLabel: 'Pausado',
       tone: 'warning',
@@ -138,24 +158,17 @@ function getOrderProgressInfo(order) {
     };
   }
 
-  if (paymentStatus === 'chargeback') {
-    return {
-      title: 'Pago con contracargo',
-      description:
-        'El pago entró en una instancia de contracargo. La orden quedó detenida para revisión.',
-      paymentLabel: 'Chargeback',
-      orderLabel: 'Revisión manual',
-      shippingLabel: 'Pausado',
-      tone: 'danger',
-    };
-  }
-
   if (orderStatus === 'cancelled') {
     return {
       title: 'Pedido cancelado',
       description:
         'La orden fue cancelada y ya no seguirá avanzando en el circuito de preparación o entrega.',
-      paymentLabel: paymentStatus || '-',
+      paymentLabel:
+        paymentStatus === 'refunded'
+          ? 'Reintegrado'
+          : paymentStatus === 'cancelled'
+          ? 'Cancelado'
+          : paymentStatus || '-',
       orderLabel: 'Cancelado',
       shippingLabel: 'Sin envío',
       tone: 'muted',
@@ -292,27 +305,27 @@ export default function OrderDetail() {
 
       <section className={`order-progress order-progress--${progressInfo.tone}`}>
         <div className="order-progress__main">
-          <p className="order-progress__eyebrow">Estado actual</p>
-          <h2>{progressInfo.title}</h2>
-          <p>{progressInfo.description}</p>
+            <p className="order-progress__eyebrow">Estado actual</p>
+            <h2>{progressInfo.title}</h2>
+            <p>{progressInfo.description}</p>
         </div>
 
         <div className="order-progress__grid">
-          <div className="order-progress__item">
+            <div className="order-progress__item">
             <span>Pago</span>
             <strong>{progressInfo.paymentLabel}</strong>
-          </div>
-          <div className="order-progress__item">
+            </div>
+            <div className="order-progress__item">
             <span>Pedido</span>
             <strong>{progressInfo.orderLabel}</strong>
-          </div>
-          <div className="order-progress__item">
+            </div>
+            <div className="order-progress__item">
             <span>Envío</span>
             <strong>{progressInfo.shippingLabel}</strong>
-          </div>
+            </div>
         </div>
-      </section>
-
+        </section>
+        
       <div className="order-detail__grid">
         <section className="order-detail__card">
           <h2>Resumen</h2>

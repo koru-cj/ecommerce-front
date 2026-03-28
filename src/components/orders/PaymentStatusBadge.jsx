@@ -1,9 +1,9 @@
 const LABELS = {
   pending: 'Pago pendiente',
-  paid: 'Pago aprobado',
-  failed: 'Pago fallido',
+  approved: 'Pago aprobado',
+  rejected: 'Pago rechazado',
   refunded: 'Reintegrado',
-  chargeback: 'Chargeback',
+  cancelled: 'Pago cancelado',
 };
 
 export default function PaymentStatusBadge({ status }) {
