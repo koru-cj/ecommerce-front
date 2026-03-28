@@ -1,4 +1,4 @@
-import OrdersList from '../components/Orders/OrderList';
+import OrdersList from '../components/orders/OrderList';
 import { getMyOrders } from '../lib/apiClient';
 
 export default function Pedidos() {
