@@ -19,85 +19,90 @@ import VerifyEmail from './pages/VerifyEmail';
 import GuestRoute from './auth/GuestRoute';
 import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentPending from './pages/PaymentPending';
-import PaymentFailure from './pages/PaymentFailure'; 
+import PaymentFailure from './pages/PaymentFailure';
+import Pedidos from './pages/Pedidos';
+import Seguimiento from './pages/Seguimiento';
+import OrderDetail from './pages/OrderDetail';
 
 export default function App() {
   const { user, loading } = useAuth();
 
-
-
   return (
-    
     <SettingsProvider>
-      
       {loading ? (
         <Loader />
       ) : (
-      <ThemeLoader>
-        
-        <CartProvider>
+        <ThemeLoader>
+          <CartProvider>
+            <Router>
+              <Routes>
+                <Route path="/" element={<Layout />}>
+                  {/* Públicas */}
+                  <Route index element={<LandPage />} />
+                  <Route path="products" element={<Home />} />
+                  <Route path="cart" element={<Cart />} />
+                  <Route path="payment/success" element={<PaymentSuccess />} />
+                  <Route path="payment/pending" element={<PaymentPending />} />
+                  <Route path="payment/failure" element={<PaymentFailure />} />
+                  <Route path="verify-email" element={<VerifyEmail />} />
 
+                  {/* Solo para no logueados */}
+                  <Route
+                    path="login"
+                    element={
+                      <GuestRoute>
+                        <Login />
+                      </GuestRoute>
+                    }
+                  />
+                  <Route
+                    path="register"
+                    element={
+                      <GuestRoute>
+                        <Register />
+                      </GuestRoute>
+                    }
+                  />
 
-        <Router>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              
-              <Route index element={<LandPage />} />
-              <Route path="/products" element={<Home />} />
+                  {/* Privadas usuario */}
+                  <Route
+                    path="profile"
+                    element={user ? <Profile /> : <Navigate to="/login" replace />}
+                  />
+                  <Route
+                    path="checkout"
+                    element={user ? <Checkout /> : <Navigate to="/login" replace />}
+                  />
+                  <Route
+                    path="pedidos"
+                    element={user ? <Pedidos /> : <Navigate to="/login" replace />}
+                  />
+                  <Route
+                    path="seguimiento"
+                    element={user ? <Seguimiento /> : <Navigate to="/login" replace />}
+                  />
+                  <Route
+                    path="pedidos/:id"
+                    element={user ? <OrderDetail /> : <Navigate to="/login" replace />}
+                  />
 
-              {/* Solo para no logueados */}
-              <Route
-                path="/login"
-                element={
-                  <GuestRoute>
-                    <Login />
-                  </GuestRoute>
-                }
-              />
-              <Route
-                path="/register"
-                element={
-                  <GuestRoute>
-                    <Register />
-                  </GuestRoute>
-                }
-              />
-              <Route
-                path="/profile"
-                element={
-                  user
-                    ? <Profile />
-                    : <Navigate to="/login" replace />
-                }
-              />
-              <Route
-                path="/dashboard"
-                element={
-                  user?.role === 'admin'
-                    ? <Dashboard />
-                    : <Navigate to="/" replace />
-                }
-              />
-              <Route
-                path="/cart"
-                element={
-                  user
-                    ? <Cart />
-                    : <Navigate to="/login" replace />
-                }
-              />
-              <Route path="/checkout" element={user ? <Checkout /> : <Navigate to="/login" replace />} />
-              <Route path="/payment/success" element={<PaymentSuccess />} />
-              <Route path="/payment/pending" element={<PaymentPending />} />
-              <Route path="/payment/failure" element={<PaymentFailure />} />
+                  {/* Admin */}
+                  <Route
+                    path="dashboard"
+                    element={
+                      user?.role === 'admin'
+                        ? <Dashboard />
+                        : <Navigate to="/" replace />
+                    }
+                  />
 
-              <Route path="/verify-email" element={<VerifyEmail />} />
-              <Route path="*" element={<NotFound />} />
-            </Route>
-          </Routes>    
-        </Router>
-        </CartProvider>
-      </ThemeLoader>)}
+                  <Route path="*" element={<NotFound />} />
+                </Route>
+              </Routes>
+            </Router>
+          </CartProvider>
+        </ThemeLoader>
+      )}
     </SettingsProvider>
   );
 }

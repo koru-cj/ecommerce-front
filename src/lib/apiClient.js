@@ -456,3 +456,13 @@ export async function confirmOrderPayment(orderId, token) {
   if (!res.ok) throw new Error(data.error || 'No se pudo confirmar el pago');
   return data; // { ok: true, message: ... }
 }
+
+export async function getTrackingOrders(page = 1, limit = 20) {
+  const token = localStorage.getItem('token');
+  const res = await fetch(`${API_URL}/orders/tracking?page=${page}&limit=${limit}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Error al listar seguimiento');
+  return data;
+}
