@@ -466,3 +466,73 @@ export async function getTrackingOrders(page = 1, limit = 20) {
   if (!res.ok) throw new Error(data.error || 'Error al listar seguimiento');
   return data;
 }
+
+// ==============================
+// ADMIN ORDERS
+// ==============================
+
+export async function getAdminOrders(token) {
+  const res = await fetch(`${API_URL}/dashboard/orders`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Error al obtener pedidos');
+  return data;
+}
+
+export async function getAdminOrderDetail(orderId, token) {
+  const res = await fetch(`${API_URL}/dashboard/orders/${orderId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Error al obtener detalle del pedido');
+  return data;
+}
+
+export async function approveAdminOrderPayment(orderId, token) {
+  const res = await fetch(`${API_URL}/dashboard/orders/${orderId}/approve-payment`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Error al aprobar pago manual');
+  return data;
+}
+
+export async function markAdminOrderShipped(orderId, token) {
+  const res = await fetch(`${API_URL}/dashboard/orders/${orderId}/mark-shipped`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Error al marcar pedido como enviado');
+  return data;
+}
+
+export async function markAdminOrderDelivered(orderId, token) {
+  const res = await fetch(`${API_URL}/dashboard/orders/${orderId}/mark-delivered`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Error al marcar pedido como entregado');
+  return data;
+}
