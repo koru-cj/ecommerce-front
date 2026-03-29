@@ -16,7 +16,6 @@ import './styles/Dashboard.css';
 import UserTable from '../components/dashboard/UserTable';
 import ProductTable from '../components/dashboard/ProductTable';
 import WishlistAnalytics from '../components/dashboard/WishlistAnalytics';
-import Themes from '../components/dashboard/Themes';
 import SettingPage from '../components/dashboard/SettingPage';
 import Ventas from '../components/dashboard/Ventas';
 
@@ -125,7 +124,6 @@ export default function Dashboard() {
     activeTab === 'usuarios' ? 'Usuarios' :
     activeTab === 'productos' ? 'Productos' :
     activeTab === 'wishlist' ? 'Wishlist' :
-    activeTab === 'themes' ? 'Themes' :
     activeTab === 'settings' ? 'Settings' :
     'Panel';
 
@@ -191,13 +189,6 @@ export default function Dashboard() {
             <span className="txt">Wishlist</span>
           </button>
 
-          <button
-            className={`dash-link ${activeTab === 'themes' ? 'active' : ''}`}
-            onClick={() => setActiveTab('themes')}
-          >
-            <span className="icon" aria-hidden>🎨</span>
-            <span className="txt">Themes</span>
-          </button>
 
           <button
             className={`dash-link ${activeTab === 'settings' ? 'active' : ''}`}
@@ -282,7 +273,6 @@ export default function Dashboard() {
           )}
 
           {activeTab === 'wishlist' && <WishlistAnalytics />}
-          {activeTab === 'themes' && <Themes />}
           {activeTab === 'settings' && <SettingPage />}
         </section>
       </main>

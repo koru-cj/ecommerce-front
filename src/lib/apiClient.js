@@ -244,55 +244,6 @@ export const getWishlistAnalytics = async () => {
 };
 
 
-// THEMES
-export async function getThemes(token) {
-  try {
-    const res = await fetch(`${API_URL}/dashboard/themes`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`, // ✅ Correcto
-      }
-      
-    });
-
-    if (!res.ok) throw new Error('Error al obtener temas');
-    return await res.json();
-  } catch (error) {
-    console.error('getThemes error:', error);
-    throw error;
-  }
-}
-
-export async function activateTheme(themeId, token) {
-  try {
-    const res = await fetch(`${API_URL}/dashboard/themes/${themeId}/activate`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`, // ✅ Correcto
-      }
-    });
-
-    if (!res.ok) throw new Error('Error al activar el tema');
-    return await res.json();
-  } catch (error) {
-    console.error('activateTheme error:', error);
-    throw error;
-  }
-}
-
-export async function getActiveTheme() {
-  try {
-    const res = await fetch(`${API_URL}/theme`);
-    if (!res.ok) throw new Error('Error al obtener el tema activo');
-    return await res.json(); // devuelve solo el JSON de variables
-  } catch (error) {
-    console.error('getActiveTheme error:', error);
-    throw error;
-  }
-}
-
 
 // SETTINGS
 export async function getPublicSettings() {
@@ -534,5 +485,22 @@ export async function markAdminOrderDelivered(orderId, token) {
 
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Error al marcar pedido como entregado');
+  return data;
+}
+export async function requestQuote(payload) {
+  const res = await fetch(`${API_URL}/contact/quote`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    throw new Error(data?.detail || data?.error || 'No se pudo solicitar el presupuesto');
+  }
+
   return data;
 }

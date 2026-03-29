@@ -9,7 +9,6 @@ import { useAuth } from './auth/AuthContext';
 import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
 import Loader from './components/Loader';
-import ThemeLoader from './components/dashboard/ThemeLoader';
 import { SettingsProvider } from './context/settingsContext';
 import { CartProvider } from './context/cartContext';
 import LandPage from './pages/LandPage';
@@ -32,7 +31,6 @@ export default function App() {
       {loading ? (
         <Loader />
       ) : (
-        <ThemeLoader>
           <CartProvider>
             <Router>
               <Routes>
@@ -101,7 +99,6 @@ export default function App() {
               </Routes>
             </Router>
           </CartProvider>
-        </ThemeLoader>
       )}
     </SettingsProvider>
   );
