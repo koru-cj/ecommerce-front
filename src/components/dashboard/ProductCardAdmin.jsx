@@ -26,7 +26,7 @@ const ProductCardAdmin = ({
     (!discount_expiration || new Date(discount_expiration) > new Date());
 
   return (
-    <div className={`product-card-admin ${!visible ? 'hidden' : ''}`}>
+    <div className={`product-card-admin `}>
       <div className="image-section">
         <img src={image_url || '/img/default-product.png'} alt={name} />
         {isDiscountActive && (

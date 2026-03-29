@@ -244,55 +244,6 @@ export const getWishlistAnalytics = async () => {
 };
 
 
-// THEMES
-export async function getThemes(token) {
-  try {
-    const res = await fetch(`${API_URL}/dashboard/themes`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`, // ✅ Correcto
-      }
-      
-    });
-
-    if (!res.ok) throw new Error('Error al obtener temas');
-    return await res.json();
-  } catch (error) {
-    console.error('getThemes error:', error);
-    throw error;
-  }
-}
-
-export async function activateTheme(themeId, token) {
-  try {
-    const res = await fetch(`${API_URL}/dashboard/themes/${themeId}/activate`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`, // ✅ Correcto
-      }
-    });
-
-    if (!res.ok) throw new Error('Error al activar el tema');
-    return await res.json();
-  } catch (error) {
-    console.error('activateTheme error:', error);
-    throw error;
-  }
-}
-
-export async function getActiveTheme() {
-  try {
-    const res = await fetch(`${API_URL}/theme`);
-    if (!res.ok) throw new Error('Error al obtener el tema activo');
-    return await res.json(); // devuelve solo el JSON de variables
-  } catch (error) {
-    console.error('getActiveTheme error:', error);
-    throw error;
-  }
-}
-
 
 // SETTINGS
 export async function getPublicSettings() {
@@ -464,5 +415,92 @@ export async function getTrackingOrders(page = 1, limit = 20) {
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Error al listar seguimiento');
+  return data;
+}
+
+// ==============================
+// ADMIN ORDERS
+// ==============================
+
+export async function getAdminOrders(token) {
+  const res = await fetch(`${API_URL}/dashboard/orders`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Error al obtener pedidos');
+  return data;
+}
+
+export async function getAdminOrderDetail(orderId, token) {
+  const res = await fetch(`${API_URL}/dashboard/orders/${orderId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Error al obtener detalle del pedido');
+  return data;
+}
+
+export async function approveAdminOrderPayment(orderId, token) {
+  const res = await fetch(`${API_URL}/dashboard/orders/${orderId}/approve-payment`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Error al aprobar pago manual');
+  return data;
+}
+
+export async function markAdminOrderShipped(orderId, token) {
+  const res = await fetch(`${API_URL}/dashboard/orders/${orderId}/mark-shipped`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Error al marcar pedido como enviado');
+  return data;
+}
+
+export async function markAdminOrderDelivered(orderId, token) {
+  const res = await fetch(`${API_URL}/dashboard/orders/${orderId}/mark-delivered`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Error al marcar pedido como entregado');
+  return data;
+}
+export async function requestQuote(payload) {
+  const res = await fetch(`${API_URL}/contact/quote`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    throw new Error(data?.detail || data?.error || 'No se pudo solicitar el presupuesto');
+  }
+
   return data;
 }

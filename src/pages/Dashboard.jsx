@@ -16,8 +16,8 @@ import './styles/Dashboard.css';
 import UserTable from '../components/dashboard/UserTable';
 import ProductTable from '../components/dashboard/ProductTable';
 import WishlistAnalytics from '../components/dashboard/WishlistAnalytics';
-import Themes from '../components/dashboard/Themes'
-import SettingPage from '../components/dashboard/SettingPage'
+import SettingPage from '../components/dashboard/SettingPage';
+import Ventas from '../components/dashboard/Ventas';
 
 export default function Dashboard() {
   const { user, token } = useAuth();
@@ -26,13 +26,13 @@ export default function Dashboard() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [showModal, setShowModal] = useState(false);
-    const [activeTab, setActiveTab] = useState('usuarios');
+  const [activeTab, setActiveTab] = useState('usuarios');
 
   const [editingProductId, setEditingProductId] = useState(null);
   const [editingProduct, setEditingProduct] = useState(null);
 
   const [searchTerm, setSearchTerm] = useState('');
-
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (!token) return;
@@ -41,7 +41,9 @@ export default function Dashboard() {
     getAdminCategories(token).then(setCategories);
   }, [token]);
 
-
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [activeTab]);
 
   if (user?.role !== 'admin') {
     return <p>No autorizado</p>;
@@ -67,8 +69,6 @@ export default function Dashboard() {
     setEditingProduct(null);
   }
 
-
-
   function handleEdit(id, product) {
     setEditingProductId(id);
     setEditingProduct({ ...product });
@@ -78,6 +78,14 @@ export default function Dashboard() {
     setEditingProductId(null);
     setEditingProduct(null);
   }
+
+  function sanitizeInput(input) {
+    return String(input || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9áéíóúñü\s]/gi, '')
+      .trim();
+  }
+
   const filteredProducts = products.filter(product => {
     const query = sanitizeInput(searchTerm);
 
@@ -88,172 +96,186 @@ export default function Dashboard() {
       sanitizeInput(product.type || '').includes(query) ||
       sanitizeInput(product.unit || '').includes(query) ||
       sanitizeInput(product.sku || '').includes(query) ||
-      sanitizeInput(product.category || '').includes(query) || // si es string
-      (Array.isArray(product.tags) && product.tags.some(tag =>
-        sanitizeInput(tag).includes(query)
-      )) ||
-      String(product.price).includes(query) ||
-      String(product.stock).includes(query)
+      sanitizeInput(product.category || '').includes(query) ||
+      (Array.isArray(product.tags) &&
+        product.tags.some(tag => sanitizeInput(tag).includes(query))) ||
+      String(product.price || '').includes(query) ||
+      String(product.stock || '').includes(query)
     );
   });
-  const filteredUsers = users.filter(user => {
+
+  const filteredUsers = users.filter(userItem => {
     const query = sanitizeInput(searchTerm);
 
     return (
-      sanitizeInput(user.name || '').includes(query) ||
-      sanitizeInput(user.email || '').includes(query) ||
-      sanitizeInput(user.phone || '').includes(query) ||
-      sanitizeInput(user.document_number || '').includes(query) ||
-      sanitizeInput(user.address || '').includes(query) ||
-      sanitizeInput(user.city || '').includes(query) ||
-      sanitizeInput(user.country || '').includes(query) ||
-      sanitizeInput(user.role || '').includes(query)
+      sanitizeInput(userItem.name || '').includes(query) ||
+      sanitizeInput(userItem.email || '').includes(query) ||
+      sanitizeInput(userItem.phone || '').includes(query) ||
+      sanitizeInput(userItem.document_number || '').includes(query) ||
+      sanitizeInput(userItem.address || '').includes(query) ||
+      sanitizeInput(userItem.city || '').includes(query) ||
+      sanitizeInput(userItem.country || '').includes(query) ||
+      sanitizeInput(userItem.role || '').includes(query)
     );
   });
 
-  function sanitizeInput(input) {
-      return input
-        .toLowerCase()
-        .replace(/[^a-z0-9áéíóúñü\s]/gi, '') // solo letras, números y espacios
-        .trim();
-    }
+  const currentTitle =
+    activeTab === 'ventas' ? 'Ventas' :
+    activeTab === 'usuarios' ? 'Usuarios' :
+    activeTab === 'productos' ? 'Productos' :
+    activeTab === 'wishlist' ? 'Wishlist' :
+    activeTab === 'settings' ? 'Settings' :
+    'Panel';
 
-
+  const currentPlaceholder =
+    activeTab === 'ventas'
+      ? 'Buscar por pedido, cliente, email, canal o estado…'
+      : activeTab === 'usuarios'
+      ? 'Buscar por nombre, email, rol…'
+      : 'Buscar producto, categoría, descripción…';
 
   return (
-  <div className="dashboard-shell">
-    {/* Sidebar vertical */}
-    <aside className="dash-sidebar">
-      <div className="dash-brand">
-        <div className="brand-logo" aria-hidden="true">🔥</div>
-        <div className="brand-text">
-          <strong>Panel</strong>
-          <small>Administración</small>
+    <div className="dashboard-shell">
+      <button
+        type="button"
+        className="dash-mobile-toggle"
+        onClick={() => setSidebarOpen(prev => !prev)}
+        aria-expanded={sidebarOpen}
+        aria-label="Abrir navegación del dashboard"
+      >
+        <span>☰</span>
+        <span>Panel</span>
+      </button>
+
+      <aside className={`dash-sidebar ${sidebarOpen ? 'is-open' : ''}`}>
+        <div className="dash-brand">
+          <div className="brand-logo" aria-hidden="true">🔥</div>
+          <div className="brand-text">
+            <strong>Panel</strong>
+            <small>Administración</small>
+          </div>
         </div>
-      </div>
 
-      <nav className="dash-nav" aria-label="Secciones del panel">
-        <button
-          className={`dash-link ${activeTab === 'usuarios' ? 'active' : ''}`}
-          onClick={() => setActiveTab('usuarios')}
-        >
-          <span className="icon" aria-hidden>👤</span>
-          <span className="txt">Usuarios</span>
-        </button>
+        <nav className="dash-nav" aria-label="Secciones del panel">
+          <button
+            className={`dash-link ${activeTab === 'ventas' ? 'active' : ''}`}
+            onClick={() => setActiveTab('ventas')}
+          >
+            <span className="icon" aria-hidden>🛒</span>
+            <span className="txt">Ventas</span>
+          </button>
 
-        <button
-          className={`dash-link ${activeTab === 'productos' ? 'active' : ''}`}
-          onClick={() => setActiveTab('productos')}
-        >
-          <span className="icon" aria-hidden>🛒</span>
-          <span className="txt">Productos</span>
-        </button>
+          <button
+            className={`dash-link ${activeTab === 'usuarios' ? 'active' : ''}`}
+            onClick={() => setActiveTab('usuarios')}
+          >
+            <span className="icon" aria-hidden>👤</span>
+            <span className="txt">Usuarios</span>
+          </button>
 
-        <button
-          className={`dash-link ${activeTab === 'wishlist' ? 'active' : ''}`}
-          onClick={() => setActiveTab('wishlist')}
-        >
-          <span className="icon" aria-hidden>❤️</span>
-          <span className="txt">Wishlist</span>
-        </button>
+          <button
+            className={`dash-link ${activeTab === 'productos' ? 'active' : ''}`}
+            onClick={() => setActiveTab('productos')}
+          >
+            <span className="icon" aria-hidden>📦</span>
+            <span className="txt">Productos</span>
+          </button>
 
-        <button
-          className={`dash-link ${activeTab === 'themes' ? 'active' : ''}`}
-          onClick={() => setActiveTab('themes')}
-        >
-          <span className="icon" aria-hidden>🎨</span>
-          <span className="txt">Themes</span>
-        </button>
+          <button
+            className={`dash-link ${activeTab === 'wishlist' ? 'active' : ''}`}
+            onClick={() => setActiveTab('wishlist')}
+          >
+            <span className="icon" aria-hidden>❤️</span>
+            <span className="txt">Wishlist</span>
+          </button>
 
-        <button
-          className={`dash-link ${activeTab === 'settings' ? 'active' : ''}`}
-          onClick={() => setActiveTab('settings')}
-        >
-          <span className="icon" aria-hidden>⚙️</span>
-          <span className="txt">Settings</span>
-        </button>
-      </nav>
-    </aside>
 
-    {/* Contenido principal */}
-    <main className="dash-main">
-      <header className="dash-header">
-        <h1 className="dash-title">
-          {activeTab === 'usuarios' && 'Usuarios'}
-          {activeTab === 'productos' && 'Productos'}
-          {activeTab === 'wishlist' && 'Wishlist'}
-          {activeTab === 'themes' && 'Themes'}
-          {activeTab === 'settings' && 'Settings'}
-        </h1>
+          <button
+            className={`dash-link ${activeTab === 'settings' ? 'active' : ''}`}
+            onClick={() => setActiveTab('settings')}
+          >
+            <span className="icon" aria-hidden>⚙️</span>
+            <span className="txt">Settings</span>
+          </button>
+        </nav>
+      </aside>
 
-        <input
-          type="text"
-          className="dash-search"
-          placeholder={
-            activeTab === 'usuarios'
-              ? 'Buscar por nombre, email, rol…'
-              : 'Buscar producto, categoría, descripción…'
-          }
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </header>
+      <main className="dash-main">
+        <header className="dash-header">
+          <div className="dash-header-copy">
+            <p className="dash-kicker">Administración</p>
+            <h1 className="dash-title">{currentTitle}</h1>
+          </div>
 
-      <section className="dash-content">
-        {activeTab === 'usuarios' && (
-          <UserTable users={filteredUsers} onRoleChange={handleRoleChange} />
-        )}
-
-        {activeTab === 'productos' && (
-          <>
-            <div className="dash-actions">
-              <button
-                className="btn-primary"
-                onClick={() => {
-                  setShowModal(true);
-                }}
-              >
-                ➕ Nuevo Producto
-              </button>
-            </div>
-
-            <ProductTable
-              products={filteredProducts}
-              categories={categories}
-              editingProductId={editingProductId}
-              editingProduct={editingProduct}
-              onEdit={handleEdit}
-              onCancelEdit={handleCancelEdit}
-              onChangeEdit={setEditingProduct}
-              onUpdateProduct={handleUpdateProduct}
-              onDeleteProduct={handleDeleteProduct}
+          <div className="dash-header-tools">
+            <input
+              type="text"
+              className="dash-search"
+              placeholder={currentPlaceholder}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
+          </div>
+        </header>
 
-            {editingProduct && (
-              <ProductEditModal
-                product={editingProduct}
-                onClose={handleCancelEdit}
-                onSave={handleUpdateProduct}
+        <section className="dash-content">
+          {activeTab === 'ventas' && (
+            <Ventas token={token} searchTerm={searchTerm} />
+          )}
+
+          {activeTab === 'usuarios' && (
+            <UserTable users={filteredUsers} onRoleChange={handleRoleChange} />
+          )}
+
+          {activeTab === 'productos' && (
+            <>
+              <div className="dash-actions">
+                <button
+                  className="btn-primary"
+                  onClick={() => {
+                    setShowModal(true);
+                  }}
+                >
+                  ➕ Nuevo Producto
+                </button>
+              </div>
+
+              <ProductTable
+                products={filteredProducts}
+                categories={categories}
+                editingProductId={editingProductId}
+                editingProduct={editingProduct}
+                onEdit={handleEdit}
+                onCancelEdit={handleCancelEdit}
+                onChangeEdit={setEditingProduct}
+                onUpdateProduct={handleUpdateProduct}
+                onDeleteProduct={handleDeleteProduct}
               />
-            )}
 
-            <ProductFormModal
-              show={showModal}
-              onClose={() => setShowModal(false)}
-              token={token}
-              categories={categories}
-              onProductCreated={(newProduct) => {
-                setProducts((prev) => [...prev, newProduct]);
-              }}
-            />
-          </>
-        )}
+              {editingProduct && (
+                <ProductEditModal
+                  product={editingProduct}
+                  onClose={handleCancelEdit}
+                  onSave={handleUpdateProduct}
+                />
+              )}
 
-        {activeTab === 'wishlist' && <WishlistAnalytics />}
-        {activeTab === 'themes' && <Themes />}
-        {activeTab === 'settings' && <SettingPage />}
-      </section>
-    </main>
-  </div>
-);
+              <ProductFormModal
+                show={showModal}
+                onClose={() => setShowModal(false)}
+                token={token}
+                categories={categories}
+                onProductCreated={(newProduct) => {
+                  setProducts((prev) => [...prev, newProduct]);
+                }}
+              />
+            </>
+          )}
+
+          {activeTab === 'wishlist' && <WishlistAnalytics />}
+          {activeTab === 'settings' && <SettingPage />}
+        </section>
+      </main>
+    </div>
+  );
 }

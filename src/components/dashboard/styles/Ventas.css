@@ -1,0 +1,376 @@
+/* =========================
+   Ventas
+========================= */
+.ventas-panel {
+  width: 100%;
+  min-width: 0;
+}
+
+.ventas-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.ventas-list-card,
+.ventas-detail-card {
+  border: 1px solid var(--color-border);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-dark) 92%, var(--color-gray)),
+      color-mix(in srgb, var(--color-dark) 96%, black)
+    );
+  backdrop-filter: blur(10px);
+  border-radius: 22px;
+  padding: 18px;
+  min-height: 280px;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
+  min-width: 0;
+}
+
+.ventas-section-head {
+  margin-bottom: 14px;
+}
+
+.ventas-section-head h2,
+.ventas-detail-head h2,
+.ventas-detail-section h3 {
+  margin: 0 0 6px;
+  color: var(--color-light);
+}
+
+.ventas-section-head p,
+.ventas-muted,
+.ventas-detail-kicker,
+.ventas-detail-date,
+.ventas-item p {
+  color: var(--color-muted);
+  opacity: 1;
+}
+
+.ventas-table-wrap {
+  overflow: auto;
+  border-radius: 16px;
+  border: 1px solid var(--color-border-soft);
+  display: block;
+}
+
+.ventas-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  background: color-mix(in srgb, var(--color-dark) 92%, black);
+}
+
+.ventas-table th,
+.ventas-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--color-border-soft);
+  text-align: left;
+  vertical-align: top;
+  font-size: 0.95rem;
+  color: var(--color-light);
+}
+
+.ventas-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: color-mix(in srgb, var(--color-tab-active) 82%, var(--color-dark));
+  color: var(--color-light);
+  font-weight: 800;
+}
+
+.ventas-table tbody tr {
+  cursor: pointer;
+  transition: background 0.16s ease;
+}
+
+.ventas-table tbody tr:hover,
+.ventas-table tbody tr.is-selected {
+  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+
+.ventas-cell-stack {
+  display: grid;
+  gap: 4px;
+}
+
+.ventas-detail-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.ventas-detail-badges {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ventas-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.ventas-detail-section {
+  margin-bottom: 16px;
+  min-width: 0;
+}
+
+.ventas-kv {
+  display: grid;
+  gap: 10px;
+}
+
+.ventas-kv > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--color-border-soft);
+  padding-bottom: 8px;
+  color: var(--color-light);
+}
+
+.ventas-kv > div span {
+  color: var(--color-muted);
+}
+
+.ventas-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ventas-inline-success {
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--color-success) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-success) 35%, transparent);
+  color: var(--color-light);
+}
+
+.ventas-state {
+  min-height: 120px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  border: 1px dashed var(--color-border-soft);
+  border-radius: 18px;
+  padding: 16px;
+  color: var(--color-light);
+  background: color-mix(in srgb, var(--color-dark) 92%, black);
+}
+
+.ventas-state--error {
+  color: #ffb4b4;
+}
+
+.ventas-items {
+  display: grid;
+  gap: 10px;
+}
+
+.ventas-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--color-dark) 94%, black);
+}
+
+.ventas-item strong,
+.ventas-item span {
+  color: var(--color-light);
+}
+
+.ventas-item-meta {
+  display: grid;
+  gap: 6px;
+  text-align: right;
+}
+
+.ventas-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  font-weight: 800;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.ventas-badge--pending,
+.ventas-badge--pending_payment {
+  background: color-mix(in srgb, var(--color-warning) 18%, transparent);
+  color: var(--color-warning);
+  border-color: color-mix(in srgb, var(--color-warning) 34%, transparent);
+}
+
+.ventas-badge--approved,
+.ventas-badge--preparing {
+  background: color-mix(in srgb, var(--color-primary) 24%, transparent);
+  color: var(--color-light);
+  border-color: color-mix(in srgb, var(--color-secondary) 35%, transparent);
+}
+
+.ventas-badge--shipped {
+  background: color-mix(in srgb, var(--color-info) 18%, transparent);
+  color: var(--color-light);
+  border-color: color-mix(in srgb, var(--color-info) 30%, transparent);
+}
+
+.ventas-badge--delivered {
+  background: color-mix(in srgb, var(--color-success) 18%, transparent);
+  color: #c7ffdf;
+  border-color: color-mix(in srgb, var(--color-success) 34%, transparent);
+}
+
+.ventas-badge--rejected,
+.ventas-badge--payment_failed {
+  background: color-mix(in srgb, var(--color-danger) 18%, transparent);
+  color: #ffb0b2;
+  border-color: color-mix(in srgb, var(--color-danger) 34%, transparent);
+}
+
+.ventas-badge--refunded,
+.ventas-badge--cancelled {
+  background: color-mix(in srgb, var(--color-gray) 26%, transparent);
+  color: var(--color-light);
+  border-color: color-mix(in srgb, var(--color-border-light) 28%, transparent);
+}
+
+.ventas-badge--manual_review {
+  background: color-mix(in srgb, var(--color-secondary) 18%, transparent);
+  color: var(--color-light);
+  border-color: color-mix(in srgb, var(--color-secondary) 30%, transparent);
+}
+
+/* Mobile cards */
+.ventas-mobile-list {
+  display: none;
+  gap: 12px;
+}
+
+.ventas-mobile-card {
+  border: 1px solid var(--color-border-soft);
+  border-radius: 18px;
+  padding: 14px;
+  background: color-mix(in srgb, var(--color-dark) 94%, black);
+  cursor: pointer;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+}
+
+.ventas-mobile-card:hover,
+.ventas-mobile-card.is-selected {
+  border-color: var(--color-secondary);
+  transform: translateY(-1px);
+}
+
+.ventas-mobile-card__top {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.ventas-mobile-card__kicker {
+  margin: 0 0 4px;
+  color: var(--color-muted);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.ventas-mobile-card__top h3 {
+  margin: 0;
+  color: var(--color-light);
+}
+
+.ventas-mobile-card__badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ventas-mobile-card__body {
+  display: grid;
+  gap: 10px;
+}
+
+.ventas-mobile-card__body div {
+  display: grid;
+  gap: 4px;
+}
+
+.ventas-mobile-card__body span {
+  color: var(--color-muted);
+  font-size: 0.83rem;
+}
+
+.ventas-mobile-card__body strong {
+  color: var(--color-light);
+  word-break: break-word;
+}
+
+@media (max-width: 1220px) {
+  .ventas-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 880px) {
+  .ventas-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .ventas-table-wrap {
+    display: none;
+  }
+
+  .ventas-mobile-list {
+    display: grid;
+  }
+}
+
+@media (max-width: 640px) {
+  .ventas-list-card,
+  .ventas-detail-card {
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .ventas-actions {
+    flex-direction: column;
+  }
+
+  .ventas-actions .btn-primary {
+    width: 100%;
+  }
+
+  .ventas-kv > div {
+    display: grid;
+    gap: 4px;
+  }
+
+  .ventas-item {
+    flex-direction: column;
+  }
+
+  .ventas-item-meta {
+    text-align: left;
+  }
+}
